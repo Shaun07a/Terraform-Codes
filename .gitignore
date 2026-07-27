@@ -25,3 +25,7 @@ terraform.rc
 
 # Keep the dependency lock file
 !.terraform.lock.hcl
+
+# Private and Public Key
+terra-key-ec2
+terra-key-ec2.pub
