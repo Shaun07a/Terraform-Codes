@@ -57,9 +57,17 @@ resource "aws_security_group" "my_security_group" {
 }
 # ec2 instance
 resource "aws_instace" "my_instance" {
+  # count = 2 # meta argument
+  for_each = ({
+    Terraform-automate-micro = "t2.micro",
+    Terraform-automate-medium = "t2.medium"
+  }) # meta argument
+
+depends_on = [ aws_security_group.my_security_group, aws_key_pair.my_key ]
+
   key_name        = aws_key_pair.my_key.key_name
   security_groups = [aws_security_group.my_security_group.name]
-  instace_type    = var.ec2_instance_type
+  instace_type    = each.value
   ami             = var.ec2_ami_id # Ubuntu
   user_data       = file("install_nginx.sh")
 
@@ -69,7 +77,7 @@ resource "aws_instace" "my_instance" {
   }
 
   tags {
-    Name = "Sample-Instance"
+    Name = each.key
   }
 
 }
