@@ -23,13 +23,13 @@ resource aws_security_group my_security_group{
         description = "SSH open"
     }
 
-    ingress {
-        from_port = 80
-        to_port = 80
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-        description = "HTTP open"
-    }
+    # ingress {
+    #     from_port = 80
+    #     to_port = 80
+    #     protocol = "tcp"
+    #     cidr_blocks = ["0.0.0.0/0"]
+    #     description = "HTTP open"
+    # }
 
     ingress {
         from_port = 8000
@@ -59,11 +59,11 @@ resource aws_security_group my_security_group{
 resource "aws_instace" "my_instance" {
     key_name = aws_key_pair.my_key.key_name
     security_groups = [aws_security_group.my_security_group.name]
-    instace_type = "t2.micro"
-    ami = "Enter your ami-id" # Ubuntu
+    instace_type = var.ec2_instance_type
+    ami = var.ec2_ami_id # Ubuntu
 
     root_block_device{
-        volume_size = 15
+        volume_size = var.ec2_root_storage_size
         volume_type = "gp3"
     }
 
