@@ -1,5 +1,5 @@
-resource local_file my_file{
-	filename = "automate.txt"
-	content = "This is file made using terraform"
+resource "local_file" "my_file" {
+  filename = "automate.txt"
+  content  = "This is file made using terraform"
 }
 
