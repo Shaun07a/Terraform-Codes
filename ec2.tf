@@ -60,7 +60,10 @@ resource "aws_instace" "my_instance" {
   # count = 2 # meta argument
   for_each = ({
     Terraform-automate-micro = "t2.micro",
-    Terraform-automate-medium = "t2.medium"
+    Terraform-automate-medium = "t2.medium",
+    # Prevents simultaneous creation because of state lock
+    Terraform-automate-small = "t2.small",
+    Terraform-automate-large = "t2.large"
   }) # meta argument
 
 depends_on = [ aws_security_group.my_security_group, aws_key_pair.my_key ]
