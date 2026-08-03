@@ -1,5 +1,5 @@
 # key pair (login)
-resource "aws_key_pair" "my_key" {
+resource "aws_key_pair" "my_key_new" {
   key_name   = "terra-key-ec2"
   public_key = file("terra-key-ec2.pub")
 }
@@ -82,5 +82,7 @@ depends_on = [ aws_security_group.my_security_group, aws_key_pair.my_key ]
 
 }
 
-
-
+resource "aws_instace" "ny_new_instance" {
+  ami = "unknown"
+  instance_type = "unknown"
+  }
