@@ -81,6 +81,7 @@ depends_on = [ aws_security_group.my_security_group, aws_key_pair.my_key ]
 
   tags {
     Name = each.key
+    Environment = "var.env"
   }
 
 }

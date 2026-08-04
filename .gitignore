@@ -1,15 +1,21 @@
-# Terraform working directory
+# ===========================================
+# Terraform
+# ===========================================
+
+# Local Terraform directories
+**/.terraform/*
 .terraform/
 
 # Terraform state files
 *.tfstate
 *.tfstate.*
+terraform.tfstate.d/
 
 # Crash logs
 crash.log
 crash.*.log
 
-# Variable files (may contain secrets)
+# Sensitive variable files
 *.tfvars
 *.tfvars.json
 
@@ -23,9 +29,26 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Keep the dependency lock file
-!.terraform.lock.hcl
+# Ignore local plan files
+*.tfplan
+*.plan
 
-# Private and Public Key
-terra-key-ec2
-terra-key-ec2.pub
+# ===========================================
+# IDEs
+# ===========================================
+
+.vscode/
+.idea/
+
+# ===========================================
+# Operating System
+# ===========================================
+
+.DS_Store
+Thumbs.db
+
+# ===========================================
+# Logs
+# ===========================================
+
+*.log
