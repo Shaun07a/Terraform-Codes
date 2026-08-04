@@ -53,7 +53,6 @@ resource "aws_security_group" "my_security_group" {
 
   tags = {
     Name = "automate-sg"
-    Environment = "var.env"
   }
 }
 # ec2 instance
