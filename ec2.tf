@@ -10,7 +10,7 @@ resource "aws_default_vpc" "default" {
 }
 
 resource "aws_security_group" "my_security_group" {
-  name        = "automate-sg"
+  name        = "${var.env}-automate-sg"
   description = "this will add a TF generated Security group"
   vpc_id      = aws_default_vpc.default.id # interpolation
 
