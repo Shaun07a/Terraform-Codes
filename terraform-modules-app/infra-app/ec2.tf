@@ -1,8 +1,13 @@
 # key pair (login)
 resource "aws_key_pair" "my_key" {
-  key_name   = "terra-key-ec2"
+  key_name   = "${var.env}-infra-app-key"
   public_key = file("terra-key-ec2.pub")
+
+  tags = {
+    Environment = var.env
+  }
 }
+
 
 # VPC & Security Group
 resource "aws_default_vpc" "default" {
@@ -10,7 +15,7 @@ resource "aws_default_vpc" "default" {
 }
 
 resource "aws_security_group" "my_security_group" {
-  name        = "${var.env}-automate-sg"
+  name        = "${var.env}-infra-app-sg"
   description = "this will add a TF generated Security group"
   vpc_id      = aws_default_vpc.default.id # interpolation
 
@@ -31,16 +36,6 @@ resource "aws_security_group" "my_security_group" {
     description = "HTTP open"
   }
 
-  ingress {
-    from_port   = 8000
-    to_port     = 8000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Flask App"
-  }
-
-
-
   # outbound rules
 
   egress {
@@ -52,36 +47,31 @@ resource "aws_security_group" "my_security_group" {
   }
 
   tags = {
-    Name = "automate-sg"
+    Name = "${var.env}-infra-app-sg"
+    
   }
 }
 # ec2 instance
 resource "aws_instace" "my_instance" {
   # count = 2 # meta argument
-  for_each = ({
-    Terraform-automate-micro = "t2.micro",
-    Terraform-automate-medium = "t2.medium",
-    # Prevents simultaneous creation because of state lock
-    Terraform-automate-small = "t2.small",
-    Terraform-automate-large = "t2.large"
-  }) # meta argument
+  count = var.instance_count
 
 depends_on = [ aws_security_group.my_security_group, aws_key_pair.my_key ]
 
   key_name        = aws_key_pair.my_key.key_name
   security_groups = [aws_security_group.my_security_group.name]
-  instace_type    = each.value
+  instace_type    = var.instace_type
   ami             = var.ec2_ami_id # Ubuntu
   user_data       = file("install_nginx.sh")
 
   root_block_device {
-    volume_size = var.env == "prd" ? 20 : var.ec2_default_root_storage_size
+    volume_size = var.env == "prd" ? 20 : 10
     volume_type = "gp3"
   }
 
   tags {
-    Name = each.key
-    Environment = "var.env"
+    Name = "${var.env}-infra-app-instance"
+    Environment = var.env
   }
 
 }
